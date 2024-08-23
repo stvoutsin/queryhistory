@@ -87,7 +87,7 @@ class Query:
 
         return (
             f"Query(query_text: {query_preview}, job_id: {self.job_id}, "
-            f"phase: {self.phase}, start_time: {start_time_str})\n"
+            f"phase: {self.phase}, start_time: {start_time_str})"
         )
 
     def __repr__(self) -> str:
