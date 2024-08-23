@@ -414,7 +414,7 @@ class QueryHistory:
 
         return self.parser.parse_query_details(response.content)
 
-    def save_query(self, job_id: str) -> bool:
+    def save_query(self, job_id: str) -> None:
         """Saves a query by sending a PHASE=ARCHIVED request to the job endpoint.
 
         Update:
@@ -425,24 +425,17 @@ class QueryHistory:
         ----------
         job_id
             The ID of the job to be saved.
-
-        Returns
-        -------
-        bool
-            True if the job was successfully saved, False otherwise.
         """
-        job_url = f"{self.base_url}/{job_id}"
+        job_url = f"{self.base_url}/{job_id}/phase"
         data = {"PHASE": "ARCHIVED"}
 
         try:
             response = self.session.post(job_url, data=data)
             response.raise_for_status()
             updated_query = self.get_query_details(job_id)
-            return updated_query.phase == "ARCHIVED"
         except requests.RequestException as e:
             logger.exception("Error archiving job {job_id}: {e}")
-            return False
-
+ 
     def run_query(self, job_id: str) -> None:
         """Runs a query by sending a PHASE=RUN request to the job endpoint.
 
@@ -451,7 +444,7 @@ class QueryHistory:
         job_id : str
             The ID of the job to be run.
         """
-        job_url = f"{self.base_url}/{job_id}"
+        job_url = f"{self.base_url}/{job_id}/phase"
         data = {"PHASE": "RUN"}
 
         try:
