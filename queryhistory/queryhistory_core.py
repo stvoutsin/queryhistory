@@ -382,7 +382,8 @@ class QueryHistory:
 
         if recent:
             queries.sort(
-                key=lambda q: q.creation_time if q.creation_time else True, reverse=True
+                key=lambda q: q.creation_time if q.creation_time else datetime.min,
+                reverse=True
             )
 
         filtered_queries = []
@@ -463,7 +464,7 @@ class QueryHistory:
 if __name__ == "__main__":
     query_history = QueryHistory(
         base_url="",
-        token="",
+        token=""
     )
     # Show 2 of my queries
     queries = query_history.get_queries(limit=2)
