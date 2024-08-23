@@ -86,8 +86,8 @@ class Query:
         )
 
         return (
-            f"Query(job_id: {self.job_id}, phase: {self.phase}, start_time: {start_time_str})\n"
-            f"Query text: {query_preview}"
+            f"Query(query_text: {self.query_text}, job_id: {self.job_id}, "
+            f"phase: {self.phase}, start_time: {start_time_str})\n"
         )
 
     def __repr__(self) -> str:
