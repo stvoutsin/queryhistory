@@ -28,7 +28,7 @@ class Query:
         The current phase of the query job.
     owner_id : str
         The owner ID of the query job owner.
-    creation_time : datetime
+    creation_time : Optional[datetime]
         The time when the query job was created.
     run_id : Optional[str]
         The unique identifier of the query run.
@@ -86,7 +86,7 @@ class Query:
         )
 
         return (
-            f"Query(query_text: {self.query_text}, job_id: {self.job_id}, "
+            f"Query(query_text: {query_preview}, job_id: {self.job_id}, "
             f"phase: {self.phase}, start_time: {start_time_str})\n"
         )
 
@@ -149,10 +149,14 @@ class QueryParser:
         owner_id_elem = job_ref.find("uws:ownerId", self.namespace)
         creation_time_elem = job_ref.find("uws:creationTime", self.namespace)
 
-        if phase_elem is None or owner_id_elem is None or creation_time_elem is None:
+        if phase_elem is None or owner_id_elem is None:
             return None
 
-        creation_time = datetime.fromisoformat(creation_time_elem.text.rstrip("Z"))
+        creation_time = (
+            datetime.fromisoformat(creation_time_elem.text.rstrip("Z"))
+            if creation_time_elem is not None
+            else None
+        )
 
         return Query(
             job_id=job_id,
@@ -377,7 +381,9 @@ class QueryHistory:
         queries = self.parser.parse_query_list(xml_content=response.content)
 
         if recent:
-            queries.sort(key=lambda q: q.creation_time, reverse=True)
+            queries.sort(
+                key=lambda q: q.creation_time if q.creation_time else True, reverse=True
+            )
 
         filtered_queries = []
         for query in queries:
