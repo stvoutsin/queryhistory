@@ -1,5 +1,7 @@
 # queryhistory
-Python lib for providing UWS job History using the async jobs endpoint
+
+Python library for providing UWS job history using the async jobs endpoint
+Allows querying by various filters, some which are run on the server side and are part of the UWS specification (last, filter by date) while custom filters can also be defined which are run on the client side.
 
 ## Installation
     pip install .
